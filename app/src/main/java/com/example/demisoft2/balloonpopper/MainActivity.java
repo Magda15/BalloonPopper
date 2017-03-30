@@ -14,7 +14,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getWindow().setBackgroundDrawableResource(R.drawable.modern_background);
         mContentView = (ViewGroup) findViewById(R.id.activity_main);
+
+        mContentView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                setToFullScreen();
+            }
+        });
     }
 
     private void setToFullScreen(){
