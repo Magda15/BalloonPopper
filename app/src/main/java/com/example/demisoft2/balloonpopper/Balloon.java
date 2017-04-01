@@ -3,15 +3,19 @@ package com.example.demisoft2.balloonpopper;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.example.demisoft2.balloonpopper.utils.PixelHelper;
 
-public class Balloon extends ImageView implements Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
+public class Balloon extends ImageView implements Animator.AnimatorListener,
+        ValueAnimator.AnimatorUpdateListener {
 
     private ValueAnimator mAnimator;
+    private BalloonListener mListener;
+    private boolean mPopped;
 
     public Balloon(Context context) {
         super(context);
@@ -20,6 +24,7 @@ public class Balloon extends ImageView implements Animator.AnimatorListener, Val
     public Balloon(Context context, int color, int rawHeight) {
         super(context);
 
+        mListener = (BalloonListener) context;
         this.setImageResource(R.drawable.balloon);
         this.setColorFilter(color);
 
@@ -49,7 +54,9 @@ public class Balloon extends ImageView implements Animator.AnimatorListener, Val
 
     @Override
     public void onAnimationEnd(Animator animation) {
-
+        if(!mPopped){
+            mListener.popBalloon(this, false);
+        }
     }
 
     @Override
@@ -65,5 +72,20 @@ public class Balloon extends ImageView implements Animator.AnimatorListener, Val
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
         setY((float) valueAnimator.getAnimatedValue());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(!mPopped && event.getAction() == MotionEvent.ACTION_DOWN) {
+            mListener.popBalloon(this, true);
+            mPopped = true;
+            mAnimator.cancel();
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    public interface BalloonListener{
+        void popBalloon(Balloon balloon, boolean userTouch);
     }
 }
