@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         mContentView.addView(balloon);
 
         //Let 'er fly
-        int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION - (mLevel * 1000));
+        int duration = Math.max(MIN_ANIMATION_DURATION, MAX_ANIMATION_DURATION  - (mLevel * 1000));
         balloon.releaseBalloon(mScreenHeight, duration);
     }
 }
